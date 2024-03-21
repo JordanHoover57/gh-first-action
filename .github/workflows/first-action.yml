@@ -6,9 +6,5 @@ jobs:
     steps:
       - name: Print Greeting
         run: echo "Hey there!"
-      - name: Fail Job
-        run: |
-          echo "We are going to fail"
-          core.setFailed
       - name: Print Goodbye
         run: echo "See ya!"
