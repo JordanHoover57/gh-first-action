@@ -11,13 +11,26 @@ jobs:
   pre-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Print previous job status
+      - name: Print github context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
-      - name: Print trigger
-        run: echo "${{ toJson(github.event.name) }}"
+      - name: Print Previous Steps Conclusion Via Event workflow run
+        env:
+          GITHUB_CONCLUSION: ${{ toJson(github.event.workflow_run.conclusion) }}
+        run: |
+          echo "$GITHUB_CONCLUSION"
+      - name: Print Trigger from github event_name
+        env:
+          CONCLUSION: ${{ toJson(github.event_name) }}
+        run: |
+          echo "$CONCLUSION"
+      - name: Print Trigger from github event name
+        env:
+          CONCLUSION2: ${{ toJson(github.event.name) }}
+        run: |
+          echo "$CONCLUSION2"
   first-job:
     runs-on: ubuntu-latest
     steps:
