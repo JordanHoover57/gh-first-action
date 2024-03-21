@@ -1,1 +1,24 @@
+name: Second Workflow
+on:
+  workflow_run:
+    workflows: [First Workflow]
+    types:
+      - completed
 
+  workflow_dispatch:
+  
+jobs:
+  pre-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print previous job status
+        run: echo ${{github.event.workflow_run.conclusions}}
+      - name: Print trigger
+        run: echo ${{github.event.name}}
+  first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Greeting
+        run: echo "Hey from second job!"
+      - name: Print Goodbye
+        run: echo "Bye from second job!"
