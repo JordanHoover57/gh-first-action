@@ -26,7 +26,10 @@ jobs:
         run: |
           echo "Previous workflow failed"
           core.setFailed
-        
+      - name: Failure Notification
+        if: ${{ failure() }}
+        run: |
+          echo "Sending to teams we failed"        
   second-job:
     needs:
       - first-job
