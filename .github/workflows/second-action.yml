@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print previous job status
-        run: echo ${{github.event.workflow_run.conclusions}}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
       - name: Print trigger
-        run: echo ${{github.event.name}}
+        run: echo "${{ toJson(github.event.name) }}"
   first-job:
     runs-on: ubuntu-latest
     steps:
