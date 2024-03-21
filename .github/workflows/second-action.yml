@@ -8,26 +8,26 @@ on:
   workflow_dispatch:
   
 jobs:
-  pre-job:
+  first-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Print github context
+      - name: Set Previous Workflow Status
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+          PREV_WORKFLOW_STATUS: ${{ toJson(github.event.workflow_run.conclusion) }}
         run: |
-          echo "$GITHUB_CONTEXT"
-      - name: Print Previous Steps Conclusion Via Event workflow run
+          echo "$PREV_WORKFLOW_STATUS"
+      - name: Set Workflow Trigger
         env:
-          GITHUB_CONCLUSION: ${{ toJson(github.event.workflow_run.conclusion) }}
+          WORKFLOW_TRIGGER: ${{ toJson(github.event_name) }}
         run: |
-          echo "$GITHUB_CONCLUSION"
-      - name: Print Trigger from github event_name
-        env:
-          CONCLUSION: ${{ toJson(github.event_name) }}
+          echo "$WORKFLOW_TRIGGER"
+      - name: Pass or Fail Job Based on Previous Workflow
+        if: ${{ (github.event_name == 'workflow_run') && (github.event.workflow_run.conclusion == 'failure') }}
         run: |
-          echo "$CONCLUSION"
-  first-job:
-    if: ${{ (github.event.workflow_run.conclusion == 'success') || (github.event_name == 'workflow_dispatch')}}
+          echo "Previous workflow failed"
+          core.setFailed
+        
+  second-job:
     runs-on: ubuntu-latest
     steps:
       - name: Print Greeting
